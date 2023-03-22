@@ -13,8 +13,8 @@ const NewHireForm = () => {
         <span className={classes.Block_1_value}>467</span>
       </div>
       <div className={classes.Block_2}>
-        <NewHireFormField></NewHireFormField>
-        <NewHireFormField></NewHireFormField>
+        <NewHireFormField label="Candidate Name"></NewHireFormField>
+        <NewHireFormField label="Experience"></NewHireFormField>
       </div>
       <div className={classes.Block_3}>
         <div className={classes.Block_3_1}>Block 3 1

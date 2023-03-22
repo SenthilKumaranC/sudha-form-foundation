@@ -1,7 +1,7 @@
 import classes from "./NewHireFormField.module.css"
-const NewHireFormField = () => {
+const NewHireFormField = (props:any) => {
    return <div className={classes.NewHireFormField}>
-      <span className={classes.NewHireFormFieldLabel}>some Lable</span>
+      <span className={classes.NewHireFormFieldLabel}>{props.label}</span>
       <input></input>
    </div>
 }
