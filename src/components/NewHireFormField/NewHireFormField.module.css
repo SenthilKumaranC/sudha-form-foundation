@@ -1,0 +1,8 @@
+.NewHireFormField{
+    display: flex;
+    gap:20px;
+}
+
+.NewHireFormFieldLabel{
+    color: gray;
+}
