@@ -6,3 +6,7 @@
 .NewHireFormFieldLabel{
     color: gray;
 }
+
+input{
+    min-width: 0;
+}
