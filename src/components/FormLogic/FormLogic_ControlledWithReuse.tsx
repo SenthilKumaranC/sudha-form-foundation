@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import { lengthValidator } from "../../validators/lengthValidator";
 import { requiredValidator } from "../../validators/requiredValidator";
+import InputGroup from "../InputGroup/InputGroup";
 import InputStringField from "../InputStringField/InputStringField";
 
 const FormLogicControlledWithReuse = () => {
@@ -38,11 +39,7 @@ const FormLogicControlledWithReuse = () => {
     [fieldNames]
   );
 
-  const [edit, setEdit] = useState<boolean>(false);
-
-  const toggleEdit = useCallback(() => {
-    setEdit(!edit);
-  }, [edit]);
+ 
 
   const [inputs, setInputs] = useState<any[]>([
     {
@@ -59,20 +56,28 @@ const FormLogicControlledWithReuse = () => {
     },
   ]);
 
+  const [inputs2, setInputs2] = useState<any[]>([
+    {
+      id: "username2",
+      name: "username2",
+      validators: [requiredValidator("Please enter Username2")],
+      placeholder: "Enter Username2",
+    },
+    {
+      id: "password2",
+      name: "password2",
+      validators: [requiredValidator("Please enter Password2")],
+      placeholder: "Enter Password2",
+    },
+  ]);
+
   return (
     <form onSubmit={onSubmit}>
-      <button onClick={toggleEdit}>Edit</button>
-      {
-        inputs.map((input)=>{
-          return <InputStringField key={input.id}
-          disabled={!edit}
-          name={input.name}
-          validators={input.validators}
-          onDataChange={waitForChildNotification}
-          placeholder={input.placeholder}
-        ></InputStringField>
-        })
-      }
+      
+      <InputGroup inputs={inputs} waitForChildNotification={waitForChildNotification}></InputGroup>
+      
+      <InputGroup inputs={inputs2} waitForChildNotification={waitForChildNotification}></InputGroup>
+      
       {/* <InputStringField
         disabled={!edit}
         name="username"
@@ -87,7 +92,7 @@ const FormLogicControlledWithReuse = () => {
         onDataChange={waitForChildNotification}
         placeholder="Enter Password"
       ></InputStringField> */}
-      <InputStringField
+      {/* <InputStringField
         disabled={!edit}
         name="email"
         validators={[
@@ -103,7 +108,7 @@ const FormLogicControlledWithReuse = () => {
         validators={[requiredValidator("Please enter Phonenumber")]}
         onDataChange={waitForChildNotification}
         placeholder="Enter Phone Number"
-      ></InputStringField>
+      ></InputStringField> */}
       <button type="submit" disabled={submitDisabled}>
         Submit
       </button>
