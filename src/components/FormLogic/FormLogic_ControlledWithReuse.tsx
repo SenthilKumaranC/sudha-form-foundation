@@ -14,51 +14,93 @@ const FormLogicControlledWithReuse = () => {
     e.preventDefault();
   }, []);
 
-  const waitForChildNotification = useCallback((childData: any) => {
-    formData.current[childData.name] = childData;
+  const waitForChildNotification = useCallback(
+    (childData: any) => {
+      formData.current[childData.name] = childData;
 
-    const allValid = fieldNames.current.every((fieldName) => {
-      const savedChildData = formData.current[fieldName];
-      if (!!savedChildData && savedChildData.valid) {
-        return true;
+      const allValid = fieldNames.current.every((fieldName) => {
+        const savedChildData = formData.current[fieldName];
+        if (!!savedChildData && savedChildData.valid) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+
+      if (allValid) {
+        setSubmitDisabled(false);
       } else {
-        return false;
+        setSubmitDisabled(true);
       }
-    });
 
-    if (allValid) {
-      setSubmitDisabled(false);
-    } else {
-      setSubmitDisabled(true);
-    }
+      console.log(formData);
+    },
+    [fieldNames]
+  );
 
-    console.log(formData);
+  const [edit, setEdit] = useState<boolean>(false);
 
-  }, [fieldNames]);
+  const toggleEdit = useCallback(() => {
+    setEdit(!edit);
+  }, [edit]);
+
+  const [inputs, setInputs] = useState<any[]>([
+    {
+      id: "username",
+      name: "username",
+      validators: [requiredValidator("Please enter Username")],
+      placeholder: "Enter Username",
+    },
+    {
+      id: "password",
+      name: "password",
+      validators: [requiredValidator("Please enter Password")],
+      placeholder: "Enter Password",
+    },
+  ]);
 
   return (
     <form onSubmit={onSubmit}>
-      <InputStringField
+      <button onClick={toggleEdit}>Edit</button>
+      {
+        inputs.map((input)=>{
+          return <InputStringField key={input.id}
+          disabled={!edit}
+          name={input.name}
+          validators={input.validators}
+          onDataChange={waitForChildNotification}
+          placeholder={input.placeholder}
+        ></InputStringField>
+        })
+      }
+      {/* <InputStringField
+        disabled={!edit}
         name="username"
-        validators={[requiredValidator]}
+        validators={[requiredValidator("Please enter Username")]}
         onDataChange={waitForChildNotification}
         placeholder="Enter Username"
       ></InputStringField>
       <InputStringField
+        disabled={!edit}
         name="password"
-        validators={[requiredValidator]}
+        validators={[requiredValidator("Please enter Password")]}
         onDataChange={waitForChildNotification}
         placeholder="Enter Password"
-      ></InputStringField>
+      ></InputStringField> */}
       <InputStringField
+        disabled={!edit}
         name="email"
-        validators={[requiredValidator, lengthValidator(5)]}
+        validators={[
+          requiredValidator("Please enter Email"),
+          lengthValidator(5),
+        ]}
         onDataChange={waitForChildNotification}
         placeholder="Enter Email Address"
       ></InputStringField>
       <InputStringField
+        disabled={!edit}
         name="phonenumber"
-        validators={[requiredValidator]}
+        validators={[requiredValidator("Please enter Phonenumber")]}
         onDataChange={waitForChildNotification}
         placeholder="Enter Phone Number"
       ></InputStringField>

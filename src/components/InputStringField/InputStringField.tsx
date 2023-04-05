@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import "./InputStringField.css"
 
 const InputStringField = (props: any) => {
-  //props.validators
+
+  const { disabled, placeholder, validators, onDataChange, name } = props;
 
   const [value, setValue] = useState<string>("");
   const valid = useRef<boolean>(false);
@@ -10,8 +12,8 @@ const InputStringField = (props: any) => {
   const validate = useCallback(
     (tempInputValue: string) => {
       let error = "";
-      if (props.validators) {
-        let valid = props.validators?.every((validator: any) => {
+      if (validators) {
+        let valid = validators?.every((validator: any) => {
           error = validator(tempInputValue);
           if (error === undefined) {
             return true;
@@ -24,26 +26,23 @@ const InputStringField = (props: any) => {
         return { valid: true, error: "" };
       }
     },
-    [props.validators]
+    [validators]
   );
 
   useEffect(() => {
     valid.current = validate(value).valid;
-    if (props.onDataChange)
-      props.onDataChange({
-        name: props.name,
+    if (onDataChange)
+      onDataChange({
+        name: name,
         value: value,
         valid: valid.current,
       });
-  }, [props, validate, value]);
+  }, [name, onDataChange, validate, value]);
 
-  const onChange = useCallback(
-    (e: any) => {
-      const tempInputValue = e.target.value;
-      setValue(tempInputValue);
-    },
-    []
-  );
+  const onChange = useCallback((e: any) => {
+    const tempInputValue = e.target.value;
+    setValue(tempInputValue);
+  }, []);
 
   const onBlur = useCallback(
     (e: any) => {
@@ -60,13 +59,23 @@ const InputStringField = (props: any) => {
     [validate]
   );
 
+  useEffect(()=>{
+
+    if(disabled){
+      setError("");
+      setValue("")
+    }
+
+  },[disabled])
+
   return (
     <div style={{ display: "flex", flexDirection: "column" }}>
       <input
+        disabled={disabled}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
-        placeholder={props.placeholder}
+        placeholder={placeholder}
       ></input>
       {!!error && <span style={{ color: "red" }}>{error}</span>}
     </div>
